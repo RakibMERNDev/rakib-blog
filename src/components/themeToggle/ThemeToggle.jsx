@@ -25,7 +25,7 @@ const ThemeToggle = () => {
             : { right: 1, background: "white" }
         }
       ></div>
-      <Image src="/moon.png" alt="" width={14} height={14} />
+      <Image src="/sun.png" alt="" width={14} height={14} />
     </div>
   );
 };
