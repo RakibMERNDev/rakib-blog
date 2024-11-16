@@ -17,13 +17,13 @@ const Card = () => {
           Lorem ipsum dolor sit, amet consectetur adipisicing elit. Nulla,
           veritatis?
         </h1>
-        <p>
+        <p className={styles.desc}>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Sint delectus
           ex inventore recusandae ipsam cupiditate placeat saepe quae. Nostrum
           delectus deleniti aut facere ipsum labore magnam possimus voluptatum
           animi aspernatur.
         </p>
-        <Link href="/post/1">Read More</Link>
+        <Link href="/post/1" className={styles.link}>Read More</Link>
       </div>
     </div>
   );
