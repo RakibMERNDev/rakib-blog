@@ -21,7 +21,7 @@ const AuthLinks = () => {
         <div className={styles.line}></div>
       </div>
       {open && (
-        <div className={styles.reponsiveMenu}>
+        <div className={styles.responsiveMenu}>
           <Link href="/">HomePage</Link>
           <Link href="/">About</Link>
           <Link href="/">Contact</Link>
