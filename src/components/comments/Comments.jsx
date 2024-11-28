@@ -25,17 +25,23 @@ const Comments = () => {
           <div className={styles.user}>
             <Image
               src="/p1.jpeg"
+              alt=""
               width={50}
               height={50}
-              alt="avatar"
               className={styles.image}
             />
+
             <div className={styles.userInfo}>
-              <span className={styles.userName}>Jhon Doe</span>
-              <span className={styles.date}>25.11.24</span>
+              <span className={styles.username}>Jhon Doe</span>
+              <span className={styles.date}>24.11.2024</span>
             </div>
           </div>
-          <p className={styles.desc}>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Non quis aliquam totam. Quod similique perspiciatis facere. Molestias ex dolorem ut?</p>
+          <p className={styles.desc}>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque
+            fugit tempore aspernatur quam odit dolores similique, nostrum
+            itaque? Error inventore maiores illo sit natus dolor rem nam
+            delectus mollitia totam?
+          </p>
         </div>
       </div>
     </div>
