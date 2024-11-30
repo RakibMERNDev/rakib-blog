@@ -43,6 +43,50 @@ const Comments = () => {
             delectus mollitia totam?
           </p>
         </div>
+        <div className={styles.comment}>
+          <div className={styles.user}>
+            <Image
+              src="/p1.jpeg"
+              alt=""
+              width={50}
+              height={50}
+              className={styles.image}
+            />
+
+            <div className={styles.userInfo}>
+              <span className={styles.username}>Jhon Doe</span>
+              <span className={styles.date}>24.11.2024</span>
+            </div>
+          </div>
+          <p className={styles.desc}>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque
+            fugit tempore aspernatur quam odit dolores similique, nostrum
+            itaque? Error inventore maiores illo sit natus dolor rem nam
+            delectus mollitia totam?
+          </p>
+        </div>
+        <div className={styles.comment}>
+          <div className={styles.user}>
+            <Image
+              src="/p1.jpeg"
+              alt=""
+              width={50}
+              height={50}
+              className={styles.image}
+            />
+
+            <div className={styles.userInfo}>
+              <span className={styles.username}>Jhon Doe</span>
+              <span className={styles.date}>24.11.2024</span>
+            </div>
+          </div>
+          <p className={styles.desc}>
+            Lorem ipsum dolor sit amet consectetur, adipisicing elit. Atque
+            fugit tempore aspernatur quam odit dolores similique, nostrum
+            itaque? Error inventore maiores illo sit natus dolor rem nam
+            delectus mollitia totam?
+          </p>
+        </div>
       </div>
     </div>
   );
