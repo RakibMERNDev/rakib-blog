@@ -4,7 +4,7 @@ const { createContext, useState, useEffect } = require("react");
 
 export const ThemeContext = createContext();
 
-const getFormLocalStorage = () => {
+const getFromLocalStorage = () => {
   if (typeof window !== "undefined") {
     const value = localStorage.getItem("theme");
     return value || "light";
@@ -13,7 +13,7 @@ const getFormLocalStorage = () => {
 
 export const ThemeContextProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => {
-    return getFormLocalStorage();
+    return getFromLocalStorage();
   });
 
   const toggle = () => {
