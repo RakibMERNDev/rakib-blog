@@ -1,4 +1,3 @@
-
 import styles from "./footer.module.css";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,7 +8,7 @@ const Footer = () => {
       <div className={styles.info}>
         <div className={styles.logo}>
           <Image src="/logo.png" alt="lama blog" width={50} height={50} />
-          <h1 className={styles.logoText}>Lamablog</h1>
+          <h1 className={styles.logoText}>RakibBlog</h1>
         </div>
         <p className={styles.desc}>
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Enim
