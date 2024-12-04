@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const getData = async () => {
-  const res = await fetch("http://localhost:3000/api/categories", {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/categories`, {
     cache: "no-store",
   });
   if (!res.ok) throw new Error("Failed to fetch categories");
