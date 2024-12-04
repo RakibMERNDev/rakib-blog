@@ -2,7 +2,7 @@ import styles from "./cardlist.module.css";
 import Pagination from "../pagination/Pagination";
 import Card from "../card/Card";
 
-const getData = async ({ page, cat }) => {
+const getData = async (page, cat) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_URL}/posts?page=${page}&cat=${cat || ""}`,
     {
