@@ -17,12 +17,6 @@ export const GET = async (req) => {
       ...(cat && { catSlug: cat }),
     },
   };
-
-
-
-
-
-
   
   
   try {
