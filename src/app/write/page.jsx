@@ -1,25 +1,31 @@
 "use client";
 import Image from "next/image";
 import styles from "./write.module.css";
-import "react-quill/dist/quill.bubble.css";
-import ReactQuill from "react-quill";
+import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
-
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+
+// Dynamically import ReactQuill to avoid SSR issues
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 const WritePage = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
-  const [media, seMedia] = useState("");
+  const [media, setMedia] = useState("");
   const [catSlug, setCatSlug] = useState("");
   const [uploading, setUploading] = useState(false);
   const [title, setTitle] = useState("");
+  const [file, setFile] = useState(null);
 
   const router = useRouter();
   const { status } = useSession();
 
-  const [file, setFile] = useState(null);
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.push("/");
+    }
+  }, [status, router]);
 
   const uploadImage = async (file) => {
     const formData = new FormData();
@@ -49,25 +55,18 @@ const WritePage = () => {
       if (file) {
         const imageUrl = await uploadImage(file);
         if (imageUrl) {
-          seMedia(imageUrl);
+          setMedia(imageUrl);
           // You can now use the imageUrl in your post
         }
       }
     };
 
-   file && upload();
+    upload();
   }, [file]);
-
-  useEffect(() => {
-    if (status === "notauthenticated") {
-      router.push("/");
-    }
-  }, [status, router]);
 
   if (status === "loading") {
     return <div className={styles.loading}>Loading...</div>;
   }
-
 
   const slugify = (str) =>
     str
@@ -77,29 +76,24 @@ const WritePage = () => {
       .replace(/[\s_-]+/g, "-")
       .replace(/^-+|-+$/g, "");
 
+  const handleSubmit = async () => {
+    const res = await fetch("/api/posts", {
+      method: "POST",
+      body: JSON.stringify({
+        title,
+        desc: value,
+        img: media,
+        slug: slugify(title),
+        catSlug: catSlug || "style", // If not selected, choose the general category
+      }),
+    });
 
-      const handleSubmit = async () => {
-        const res = await fetch("/api/posts", {
-          method: "POST",
-          body: JSON.stringify({
-            title,
-            desc: value,
-            img: media,
-            slug: slugify(title),
-            catSlug: catSlug || "style", //If not selected, choose the general category
-          }),
-        });
-    
-        if (res.status === 200) {
-          const data = await res.json();
-          router.push(`/posts/${data.slug}`);
-        }
-      };
+    if (res.status === 200) {
+      const data = await res.json();
+      router.push(`/posts/${data.slug}`);
+    }
+  };
 
-
-
-
-      
   return (
     <div className={styles.container}>
       <input
@@ -149,7 +143,9 @@ const WritePage = () => {
           className={styles.textArea}
         />
       </div>
-      <button className={styles.publish} onClick={handleSubmit}>Publish</button>
+      <button className={styles.publish} onClick={handleSubmit} disabled={uploading}>
+        {uploading ? "Uploading..." : "Publish"}
+      </button>
     </div>
   );
 };
