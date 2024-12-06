@@ -55,7 +55,7 @@ const WritePage = () => {
       }
     };
 
-    upload();
+   file && upload();
   }, [file]);
 
   useEffect(() => {
