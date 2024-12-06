@@ -11,14 +11,15 @@ import { useRouter } from "next/navigation";
 const WritePage = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
-  const [uploading,setUploading] = useState(false);
-
+  const [media, seMedia] = useState("");
+  const [catSlug, setCatSlug] = useState("");
+  const [uploading, setUploading] = useState(false);
+  const [title, setTitle] = useState("");
 
   const router = useRouter();
   const { status } = useSession();
 
   const [file, setFile] = useState(null);
-
 
   const uploadImage = async (file) => {
     const formData = new FormData();
@@ -26,10 +27,13 @@ const WritePage = () => {
 
     try {
       setUploading(true);
-      const res = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API}`, {
-        method: "POST",
-        body: formData,
-      });
+      const res = await fetch(
+        `https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API}`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
       const data = await res.json();
       setUploading(false);
       return data.data.url;
@@ -45,7 +49,7 @@ const WritePage = () => {
       if (file) {
         const imageUrl = await uploadImage(file);
         if (imageUrl) {
-          console.log("Image uploaded successfully:", imageUrl);
+          seMedia(imageUrl);
           // You can now use the imageUrl in your post
         }
       }
@@ -53,8 +57,6 @@ const WritePage = () => {
 
     upload();
   }, [file]);
-
-
 
   useEffect(() => {
     if (status === "notauthenticated") {
@@ -67,12 +69,53 @@ const WritePage = () => {
   }
 
 
+  const slugify = (str) =>
+    str
+      .toLowerCase()
+      .trim()
+      .replace(/[^\w\s-]/g, "")
+      .replace(/[\s_-]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+
+
+      const handleSubmit = async () => {
+        const res = await fetch("/api/posts", {
+          method: "POST",
+          body: JSON.stringify({
+            title,
+            desc: value,
+            img: media,
+            slug: slugify(title),
+            catSlug: catSlug || "style", //If not selected, choose the general category
+          }),
+        });
+    
+        if (res.status === 200) {
+          const data = await res.json();
+          router.push(`/posts/${data.slug}`);
+        }
+      };
 
 
 
+
+      
   return (
     <div className={styles.container}>
-      <input type="text" placeholder="Title" className={styles.input} />
+      <input
+        type="text"
+        placeholder="Title"
+        className={styles.input}
+        onChange={(e) => setTitle(e.target.value)}
+      />
+      <select className={styles.select} onChange={(e) => setCatSlug(e.target.value)}>
+        <option value="style">style</option>
+        <option value="fashion">fashion</option>
+        <option value="food">food</option>
+        <option value="culture">culture</option>
+        <option value="travel">travel</option>
+        <option value="coding">coding</option>
+      </select>
       <div className={styles.editor}>
         <button className={styles.button} onClick={() => setOpen(!open)}>
           <Image src="/plus.png" alt="" width={16} height={16} />
@@ -81,15 +124,14 @@ const WritePage = () => {
           <div className={styles.add}>
             <input
               type="file"
-            
               id="image"
               onChange={(e) => setFile(e.target.files[0])}
               style={{ display: "none" }}
             />
             <button className={styles.addButton}>
-            <label htmlFor="image">
-              <Image src="/image.png" alt="" width={16} height={16} />
-            </label>
+              <label htmlFor="image">
+                <Image src="/image.png" alt="" width={16} height={16} />
+              </label>
             </button>
             <button className={styles.addButton}>
               <Image src="/external.png" alt="" width={16} height={16} />
@@ -107,7 +149,7 @@ const WritePage = () => {
           className={styles.textArea}
         />
       </div>
-      <button className={styles.publish}>Publish</button>
+      <button className={styles.publish} onClick={handleSubmit}>Publish</button>
     </div>
   );
 };
