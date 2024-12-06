@@ -11,12 +11,53 @@ import { useRouter } from "next/navigation";
 const WritePage = () => {
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
+  const [uploading,setUploading] = useState(false);
+
 
   const router = useRouter();
   const { status } = useSession();
 
+  const [file, setFile] = useState(null);
+
+
+  const uploadImage = async (file) => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      setUploading(true);
+      const res = await fetch(`https://api.imgbb.com/1/upload?key=${process.env.NEXT_PUBLIC_IMGBB_API}`, {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      setUploading(false);
+      return data.data.url;
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setUploading(false);
+      return null;
+    }
+  };
+
   useEffect(() => {
-    if (status === "authenticated") {
+    const upload = async () => {
+      if (file) {
+        const imageUrl = await uploadImage(file);
+        if (imageUrl) {
+          console.log("Image uploaded successfully:", imageUrl);
+          // You can now use the imageUrl in your post
+        }
+      }
+    };
+
+    upload();
+  }, [file]);
+
+
+
+  useEffect(() => {
+    if (status === "notauthenticated") {
       router.push("/");
     }
   }, [status, router]);
@@ -24,6 +65,10 @@ const WritePage = () => {
   if (status === "loading") {
     return <div className={styles.loading}>Loading...</div>;
   }
+
+
+
+
 
   return (
     <div className={styles.container}>
@@ -34,8 +79,17 @@ const WritePage = () => {
         </button>
         {open && (
           <div className={styles.add}>
+            <input
+              type="file"
+            
+              id="image"
+              onChange={(e) => setFile(e.target.files[0])}
+              style={{ display: "none" }}
+            />
             <button className={styles.addButton}>
+            <label htmlFor="image">
               <Image src="/image.png" alt="" width={16} height={16} />
+            </label>
             </button>
             <button className={styles.addButton}>
               <Image src="/external.png" alt="" width={16} height={16} />
